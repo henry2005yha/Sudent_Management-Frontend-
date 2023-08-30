@@ -1,0 +1,98 @@
+
+<div class="container-fluid" style="padding: 3% 10% 0 10%">
+    
+    <div class="row mb-4 mt-3">
+        <div class="col-sm-2 ml-2" style="cursor: pointer;" (click)="refresh()">
+            <h2>Students</h2>
+        </div>
+        <div class="col-sm-4">
+            <form method="post" action="Search">
+                <div class="input-group rounded">
+                    <input [(ngModel)]="search" type="search" name="search"  class="form-control rounded search" placeholder="Search here..." style="border-radius: 0rem!important;  "/>
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary border-left-0 border" type="button" (click)="clean()">
+                            <i class="fa fa-times"></i>
+                        </button>
+                      </span>
+                    &nbsp;
+                        &nbsp;
+                    
+                        <span (click)="getStudentList()" class="input-group-text border-0" id="search-addon" style="background-color: rgba(215, 233, 252, 0.8);">
+                           <input type="submit" class="d-none" />
+                           <i class="fas fa-search"></i>&nbsp; Search
+                        </span>
+                    
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-1 pl-1" style="width:fit-content;">
+           
+        </div>
+        <!-- for export -->
+        <div class="col-sm-1.5 px-1" style="width:fit-content;">
+            <a routerLink="/student/register">
+                <button class="btn btn-primary" style="background-color: rgb(131, 178, 226); border: 0px;"><i class="fa-solid fa-plus"></i>&nbsp; New</button>
+            </a>
+        </div>
+        <div class="col-sm-1.5 px-1" style="width:fit-content;">
+            <a (click)="excelExport()"><button class="btn btn-secondary" style="background-color: rgb(131, 178, 226); border: 0px;"><i class="fa-solid fa-file-export" ></i> &nbsp;Export</button></a>
+        </div>
+
+        <!-- for import -->
+        <div class="col-sm-1.5 px-1" style="width:fit-content;">
+            <a (click)="showExcelDialog()"><button class="btn btn-secondary" style="background-color: rgb(131, 178, 226); border: 0px;"><i class="fa-solid fa-file-import"></i> &nbsp; Import</button></a>
+        </div>
+
+        <div class="col-sm pl-1" style="width:fit-content;">
+            <div class="text-right m-2">Total Student : {{totalListcount}}</div>
+        </div>
+    </div>
+
+    <table class="table" id="studentList">
+        <thead style="background-color: rgb(123, 170, 217);">
+            <tr >
+                <th>ID</th>
+                <th>Name</th>
+                <th>NRC.</th>
+                <th>Phone No.</th>
+                <th>Gender</th>
+                
+
+            </tr>
+        </thead>
+        <tbody style="height: 100px;" *ngIf="error">
+            <tr>
+                <td colspan="5" class="text-center" style="vertical-align: inherit;">There is an Error loading Students...</td>
+            </tr>
+        </tbody>
+        <tbody style="height: 100px;" *ngIf="totalListcount === 0 && !isloading && !error">
+            <tr>
+                <td colspan="5" class="text-center" style="vertical-align: inherit;">There is no Students...</td>
+            </tr>
+        </tbody>
+        <tbody style="height: 100px;" *ngIf="totalListcount === 0 && isloading">
+            <tr>
+                <td colspan="5" class="text-center" style="vertical-align: inherit;">Loading...</td>
+            </tr>
+        </tbody>
+        <tbody style="background-color: rgba(215, 233, 252, 0.8);">
+            <ng-container *ngFor="let data of studentList| paginate: { 
+                itemsPerPage: pagesize,
+                currentPage: currentpage,
+                totalItems: totalListcount };  ;let i=index">
+                <tr>
+                    <td style="cursor: pointer;" (click)="getStudent(data.student_syskey)">{{data.student_id}}</td>
+                    <td style="cursor: pointer;" (click)="getStudent(data.student_syskey)">{{data.name}}</td>
+                    <td style="cursor: pointer;" (click)="getStudent(data.student_syskey)">{{data.nrc}}</td>
+                    <td style="cursor: pointer;" (click)="getStudent(data.student_syskey)">{{data.phone}}</td>
+                    <td style="cursor: pointer;" (click)="getStudent(data.student_syskey)">{{data.gender}}</td>
+                    <!-- <td style="cursor: pointer;" (click)="confirmDialog(data.student_syskey)">Delete</td> -->
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+    <div style="text-align: center;margin-top: 20px;font-size: 12px;">
+        <pagination-controls previousLabel="Prev" nextLabel="Next"
+            (pageChange)="handlePageChange($event)"></pagination-controls>
+    </div>
+</div>

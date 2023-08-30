@@ -1,0 +1,10 @@
+<div mat-dialog-content style="padding: 10px 14px 10px 14px;">
+    <p mat-dialog-content style="padding: 10px 14px 10px 14px;">Please Choose a File</p>
+</div>
+
+<div mat-dialog-actions style="padding: 10px 14px 10px 14px;     justify-content: end;">
+    <form>
+        <input type="file" name="excel" id="excel" accept="xlsx" (change)="onFileSelect($event)" #UploadFileInput>
+        <button type="button" class="btn mx-2 px-3" style="padding: 3px; " color="primary" (click)="onConfirm()">Submit</button>
+    </form>
+</div>

@@ -1,0 +1,138 @@
+<!-- {{registrationForm.value | json}} -->
+<!-- <div class="container"  *ngIf="param !== '' && url===''">
+  <div style="margin: 50%; margin-top: 25%;">loading...</div>       
+</div> -->
+<div class="container-fluid">
+    <form [formGroup]="registrationForm" method="post" enctype="multipart/form-data">
+
+       
+        <div style="padding: 3% 3% 3% 3%; margin: 1% 3% 2% 3%; border: 2px solid #dee2e6;">
+            <label for="file" id="uploadArea" [class.d-none]="url"><i class="fa-solid fa-pen-to-square"></i> upload</label>
+            <label for="file" id="uploadArea" [class.d-none]="!url"><i class="fa-solid fa-pen-to-square"></i> edit</label>
+            <div class="row ml-1 mb-3 ">
+               
+                <div class="col-lg-3 " id="border" [class.dashed]="!url">
+
+                    <input type="file" id="file" name="img" (change)="onSelect($event)" style="display: none">
+                    
+                    <img id="preview" [src]="url"  style="max-width: 200px; max-height: 200px;">
+
+                </div>
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-2">
+                            <div class="form-group">
+                                <label for="lname">ID:</label>
+                                <small class="text-danger" *ngIf="!uq"> &nbsp; Already exists</small>
+                                <input type="text" id="id" formControlName="student_id" class="form-control"
+                                    name="student_id" [readOnly]="param !== ''">
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-4">
+                            <div class="form-group">
+
+                                <label for="fname">Name:</label>
+                                <input type="text" id="name" formControlName="name" class="form-control" required>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4 col-md-3">
+                            <div class="form-group">
+                                <label for="lname">NRC:</label>
+                                <small class="text-danger" *ngIf="!uqNrc"> &nbsp; Already exists</small>
+                                <input type="text" id="nrc" formControlName="nrc" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            <div class="form-group">
+                                <label for="lname">DOB:</label>
+                                <input type="date" formControlName="dob" id="dob" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-4">
+
+                            <div class="form-group">
+                                <label for="lname">Phone:</label>
+                                <input type="text" id="phone" formControlName="phone" class="form-control" required>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4 col-md-3">
+                            <div class="form-group">
+                                <label for="lname">Gender:</label>
+                                <select id="gender" formControlName="gender" class="form-control" required>
+                                    <option value="male" selected>Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3 col-md-5">
+                            <div class="form-group">
+                                <label for="lname">Nationality:</label>
+                                <input type="text" id="nation" formControlName="nationality" class="form-control"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="form-group">
+                                <label for="lname">Address:</label>
+                                <input type="text" id="address" formControlName="address" class="form-control" required>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="border-top: 2px solid #dee2e6; padding-top: 15px; margin-top: 15px;">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <h3>Student Details</h3>
+                    </div>
+                    <div class="form-group col-md-6 text-right">
+                        <button (click)="addRow()" class="btn btn-primary" id="add" type="button" style="background-color: rgb(89, 158, 227); border: 0px;">Add</button>
+                    </div>
+                </div>
+
+
+                <div style="background-color: rgba(0, 0, 0, 0.1); padding: 20px; margin: 0px 0 25px 0;">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Mark 1</th>
+                                <th>Mark 2</th>
+                                <th>Mark 3</th>
+                                <th>Remark</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let detail of detailGroup; let i = index" [formGroup]="detail">                            
+                                    <td><input type="text" class="form-control" formControlName="year"></td>
+                                    <td><input type="number" class="form-control" formControlName="mark1"></td>
+                                    <td><input type="number" class="form-control" formControlName="mark2"></td>
+                                    <td><input type="number" class="form-control" formControlName="mark3"></td>
+                                    <td><input type="text" class="form-control" formControlName="remark"></td>
+                                    <td [ngClass]="{'d-none' : i<1}"><i (click)="deleteRow(i)" class="fa-solid fa-delete-left text-secpndary m-2" style="font-size:x-large ;"></i></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+
+            <button [disabled]="!registrationForm.valid" type="submit" class="btn btn-primary mt-4 mr-3" style="width: 8% ; background-color: rgb(89, 158, 227); border: 0px;" id="submit" (click)="save()">Save</button>
+            <a style="width: 8%" class="btn btn-secondary mt-4 mr-3" [routerLink]="['/student']" type="button">Cancel</a>
+            <a [class.d-none]="param===''" style="width: 8%" class="btn btn-secondary mt-4 mr-3 text-white" (click)="confirmDialog()" type="button">Delete</a>
+
+        </div>
+    </form>
+</div>
